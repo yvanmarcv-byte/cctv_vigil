@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-head">
+  <h1>Scan Network for Cameras</h1>
+  <p>Automatically discover IP cameras on your local network and get their RTSP URLs.</p>
+</section>
+
+<section class="panel">
+  <p class="fineprint" style="margin-bottom:16px">
+    This will scan your network for devices with RTSP streams (port 554). 
+    It tries common camera credentials automatically. Scanning takes about 10-30 seconds.
+  </p>
+  <form method="post" class="form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Network Subnet (optional)
+      <input name="subnet" placeholder="e.g. 192.168.1 (auto-detected if empty)">
+    </label>
+    <button class="button primary" type="submit">Start Scan</button>
+  </form>
+</section>
+{% endblock %}

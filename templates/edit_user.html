@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-head">
+  <h1>Edit User</h1>
+  <p>Update user account settings for {{ user.username }}.</p>
+</section>
+
+<section class="panel">
+  {% if error %}<div class="alert">{{ error }}</div>{% endif %}
+  <form method="post" class="form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Username
+      <input value="{{ user.username }}" disabled>
+    </label>
+    <label>Role
+      <select name="role">
+        <option value="operator" {{ 'selected' if user.role == 'operator' }}>Operator</option>
+        <option value="admin" {{ 'selected' if user.role == 'admin' }}>Admin</option>
+      </select>
+    </label>
+    <label>New Password (leave blank to keep current)
+      <input name="password" type="password" minlength="8" placeholder="Minimum 8 characters">
+    </label>
+    <button class="button primary" type="submit">Save Changes</button>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-head">
+  <h1>Camera Monitoring</h1>
+  <p>Local webcam initialization, mirrored live viewport, motion scan overlay, and state-controlled recording.</p>
+</section>
+
+<section class="monitor-layout">
+  <div class="viewport-wrap">
+    <video id="live-video" autoplay muted playsinline></video>
+    <canvas id="vision-canvas"></canvas>
+    <div class="camera-badge" id="camera-signature">BROWSER-CAM-LOCAL</div>
+  </div>
+  <aside class="control-panel">
+    <h2>Recording Engine</h2>
+    <div class="metric">
+      <span>Camera</span>
+      <strong id="camera-state">Initializing</strong>
+    </div>
+    <div class="metric">
+      <span>Motion Index</span>
+      <strong id="motion-index">0.00</strong>
+    </div>
+    <div class="metric">
+      <span>Face Signature</span>
+      <strong id="face-state">Scanning</strong>
+    </div>
+    <button class="button primary" id="record-toggle">Start Recording</button>
+    <p class="fineprint">Recording data is compiled asynchronously after stop; the canvas layer is cleared immediately.</p>
+  </aside>
+</section>
+{% endblock %}

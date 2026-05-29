@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <title>CCTV Vigil</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script defer src="{{ url_for('static', filename='js/script.js') }}"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="{{ url_for('dashboard') }}">CCTV Vigil</a>
+
+    {% if current_user.is_authenticated %}
+      <nav class="tabs" aria-label="Primary navigation">
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('camera') }}">Camera Monitoring</a>
+        <a href="{{ url_for('ip_cameras') }}">IP Cameras</a>
+        <a href="{{ url_for('recordings') }}">Recordings Gallery</a>
+        <a href="{{ url_for('logs') }}">User Logs</a>
+        <a href="{{ url_for('devices') }}">Devices</a>
+        {% if current_user.is_admin %}
+          <a href="{{ url_for('users') }}">Users</a>
+        {% endif %}
+      </nav>
+
+      <div class="session">
+        <span>{{ current_user.username }} · {{ current_user.role }}</span>
+        <a class="button ghost" href="{{ url_for('change_password') }}">Change Password</a>
+        <form method="post" action="{{ url_for('logout') }}" style="display:inline">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="button ghost" type="submit">Logout</button>
+        </form>
+      </div>
+    {% endif %}
+  </header>
+
+  <main class="shell">
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

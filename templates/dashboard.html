@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-head">
+  <h1>Dashboard</h1>
+  <p>Live health view across the server node, relational database session map, and edge camera layer.</p>
+</section>
+
+<section class="status-grid">
+  <article class="status-card">
+    <span>Web Server Engine</span>
+    <strong data-status="server">{{ server_status }}</strong>
+  </article>
+  <article class="status-card">
+    <span>PostgreSQL Session Map</span>
+    <strong data-status="database">{{ db_status }}</strong>
+  </article>
+  <article class="status-card">
+    <span>Edge Detection Cameras</span>
+    <strong data-status="cameras">{{ camera_count }} active</strong>
+  </article>
+</section>
+
+<section class="panel">
+  <div class="panel-title">
+    <h2>Transaction Feed</h2>
+    <span id="feed-clock"></span>
+  </div>
+  <div class="event-feed" id="event-feed">
+    {% for log in recent_logs %}
+      <div class="event-row">
+        <span>{{ log.timestamp.strftime("%Y-%m-%d %H:%M:%S") }}</span>
+        <strong>{{ log.action }}</strong>
+        <em>{{ log.username }} · {{ log.ip_address }}</em>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

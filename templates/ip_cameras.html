@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-head">
+  <h1>IP Cameras</h1>
+  <p>Manage physical CCTV cameras connected to your network via RTSP streams.</p>
+</section>
+
+<section class="panel">
+  <div class="toolbar">
+    <div>
+      <a class="button primary" href="{{ url_for('add_ip_camera') }}">Add Camera</a>
+      <a class="button" href="{{ url_for('scan_cameras') }}">Scan Network</a>
+    </div>
+    <form method="post" action="{{ url_for('poll_ip_cameras') }}" style="display:inline">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button class="button" type="submit">Poll All Cameras</button>
+    </form>
+  </div>
+
+  {% if cameras %}
+    <div class="camera-grid">
+      {% for camera in cameras %}
+        <article class="camera-card">
+          <div class="camera-feed">
+            {% if camera.last_status == "online" %}
+              <img src="{{ url_for('camera_stream', camera_id=camera.id) }}" alt="{{ camera.name }}" loading="lazy">
+            {% else %}
+              <div class="camera-offline">
+                <span>Camera Offline</span>
+              </div>
+            {% endif %}
+          </div>
+          <div class="camera-meta">
+            <strong>{{ camera.name }}</strong>
+            {% if camera.location %}
+              <span>{{ camera.location }}</span>
+            {% endif %}
+            <span class="status-pill {{ camera.last_status }}">{{ camera.last_status }}</span>
+            <span>{{ camera.rtsp_url }}</span>
+            <span>Last checked: {{ camera.last_checked.strftime("%Y-%m-%d %H:%M:%S") if camera.last_checked else "Never" }}</span>
+          </div>
+          {% if current_user.is_admin %}
+            <form method="post" action="{{ url_for('delete_ip_camera', camera_id=camera.id) }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="button danger" type="submit">Delete</button>
+            </form>
+          {% endif %}
+        </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state">No IP cameras configured. Add a camera to get started.</div>
+  {% endif %}
+</section>
+{% endblock %}

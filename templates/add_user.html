@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-head">
+  <h1>Add User</h1>
+  <p>Create a new user account for CCTV Vigil.</p>
+</section>
+
+<section class="panel">
+  {% if error %}<div class="alert">{{ error }}</div>{% endif %}
+  <form method="post" class="form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Username
+      <input name="username" required placeholder="e.g. john_doe">
+    </label>
+    <label>Password
+      <input name="password" type="password" required minlength="8" placeholder="Minimum 8 characters">
+    </label>
+    <label>Role
+      <select name="role">
+        <option value="operator">Operator</option>
+        <option value="admin">Admin</option>
+      </select>
+    </label>
+    <button class="button primary" type="submit">Create User</button>
+  </form>
+</section>
+{% endblock %}

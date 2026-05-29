@@ -1,0 +1,12 @@
+.env
+.secret_key
+instance/
+*.sqlite3
+__pycache__/
+*.pyc
+.venv/
+venv/
+.idea/
+*.egg-info/
+dist/
+build/

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-head">
+  <h1>Add IP Camera</h1>
+  <p>Connect a physical CCTV camera via RTSP stream URL.</p>
+</section>
+
+<section class="panel">
+  {% if error %}<div class="alert">{{ error }}</div>{% endif %}
+  <p class="fineprint" style="margin-bottom:16px">
+    Don't know your RTSP URL? <a href="{{ url_for('scan_cameras') }}" style="color:var(--brand);font-weight:700">Scan your network</a> to auto-discover cameras.
+  </p>
+  <form method="post" class="form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Camera Name
+      <input name="name" required placeholder="e.g. Front Entrance Camera" value="{{ request.args.get('name', '') }}">
+    </label>
+    <label>RTSP URL
+      <input name="rtsp_url" required placeholder="rtsp://username:password@192.168.1.100:554/stream1" value="{{ request.args.get('rtsp_url', '') }}">
+    </label>
+    <label>Location (optional)
+      <input name="location" placeholder="e.g. Main entrance, Parking lot">
+    </label>
+    <button class="button primary" type="submit">Add Camera</button>
+  </form>
+</section>
+{% endblock %}

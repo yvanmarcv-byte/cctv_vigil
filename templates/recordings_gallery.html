@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-head">
+  <h1>Recordings Gallery</h1>
+  <p>Newest clips appear first from the property-mapped database feed.</p>
+</section>
+
+<section class="recording-grid">
+  {% for item in recordings %}
+    <article class="recording-card">
+      <video controls preload="metadata" src="{{ item.file_url }}"></video>
+      <div class="recording-meta">
+        <strong>{{ item.title }}</strong>
+        {% if "MOTION DETECTED" in item.source_signature %}
+          <span class="motion-tag">Motion Detected</span>
+        {% endif %}
+        <span>{{ item.source_signature }}</span>
+        <span>{{ item.created_at.strftime("%Y-%m-%d %H:%M:%S") }}</span>
+      </div>
+      {% if current_user.is_admin %}
+        <form method="post" action="{{ url_for('delete_recording', recording_id=item.id) }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="button danger" type="submit">Delete Permanently</button>
+        </form>
+      {% else %}
+        <button class="button locked" disabled>Deletion Locked</button>
+      {% endif %}
+    </article>
+  {% else %}
+    <div class="empty-state">No recordings yet.</div>
+  {% endfor %}
+</section>
+{% endblock %}

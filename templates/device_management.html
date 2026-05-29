@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="page-head">
+  <h1>Device Management</h1>
+  <p>Administrator network checks for routers and remote IP gateway cameras.</p>
+</section>
+
+<section class="panel">
+  <form method="post" action="{{ url_for('poll_devices') }}" class="toolbar">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button class="button primary" type="submit">Poll Hardware Assets</button>
+  </form>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Host</th>
+          <th>Type</th>
+          <th>Status</th>
+          <th>Last Checked</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for device in devices %}
+          <tr>
+            <td>{{ device.name }}</td>
+            <td>{{ device.host }}</td>
+            <td>{{ device.device_type }}</td>
+            <td><span class="status-pill {{ device.last_status }}">{{ device.last_status }}</span></td>
+            <td>{{ device.last_checked.strftime("%Y-%m-%d %H:%M:%S") if device.last_checked else "Not checked" }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}
