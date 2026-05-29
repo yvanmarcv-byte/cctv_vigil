@@ -55,7 +55,9 @@ def create_app():
     app.config["SESSION_COOKIE_SECURE"] = os.getenv("FLASK_DEBUG", "false").lower() != "true"
     database_url = os.getenv("DATABASE_URL")
     if database_url and database_url.startswith("postgres://"):
-        database_url = database_url.replace("postgres://", "postgresql://", 1)
+        database_url = database_url.replace("postgres://", "postgresql+psycopg://", 1)
+    elif database_url and database_url.startswith("postgresql://"):
+        database_url = database_url.replace("postgresql://", "postgresql+psycopg://", 1)
     app.config["SQLALCHEMY_DATABASE_URI"] = database_url or "sqlite:///cctv.sqlite3"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["MAX_CONTENT_LENGTH"] = 250 * 1024 * 1024
